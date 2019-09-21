@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<title>Mastermind</title>
+<body>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<style>
+			table.code {
+				font-size: 300px;
+				text-align: center;
+				vertical-align: bottom;
+				margin-left: auto; 
+				margin-right: auto;
+			}
+			.center {
+				margin-left: auto;
+				margin-right: auto;
+			}
+			th {
+				padding: 0px 20px;
+			}
+		</style>
+	</head>
+	<div class="tab">
+		<a class="active" href="index.html">Play</a>
+		<a href="leaderboard.html">Leaderboard</a>
+		<a href="#settings">Settings</a>
+	</div>
+	<div class="subtab">
+		<a class="active" href="mastermind.html">Mastermind</a>
+	</div>
+	<table class="code">
+		<th id="0">_</th>
+		<th id="1">_</th>
+		<th id="2">_</th>
+		<th id="3">_</th>
+		<th id="4">_</th>
+	</table>
+	<div class="center">
+		<script>
+			const digit = 5; // Number of digits in the code
+			const max = 45; // Maximum number of guesses
+			const column = Math.floor((max+14)/15);
+			var div = document.getElementsByClassName("center")[0];
+			div.style.width = 200 * column + "px";
+			div.style.marginLeft = 52 - (6.5 * column) + "%";
+			for (var i = 0; i < column; i++){
+				var list = document.createElement("table");
+				div.appendChild(list);
+				list.className = "list" + i;
+				list.style = "display: inline-block;" + 
+					"font-size: 24px;" + 
+					"text-align: center;" + 
+					"width: " + 100/column + "%;";
+				for (var j = 0; j < 15; j++){
+					var row = document.createElement("tr");
+					row.className = "row" + j;
+					list.appendChild(row);
+					for (var k = 0; k < 3; k++){
+						var element = document.createElement("td");
+						if (k !== 0){
+							element.textContent = ".";
+						}
+						else {
+							element.textContent = ".";
+						}
+						element.id = "e" + (45*i + 3*j + k);
+						if (k === 1){
+							element.style.color = "#0f0";
+						}
+						else if (k === 2){
+							element.style.color = "#fa0";
+						}
+						row.appendChild(element);
+					}
+				}
+			}
+		</script>
+	</div>
+	<script type="text/javascript" src="mastermind.js"></script>
+</body>
+</html>

@@ -5,6 +5,30 @@
 	<head>
 		<link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<style>
+			table {
+				border-collapse: collapse;
+				background-color: #444;
+				font-size: 20px;
+				text-align: center;
+				vertical-align: bottom;
+				margin-left: auto; 
+				margin-right: auto;
+			}
+			td {
+				padding: 0 20px;
+			}
+			th {
+				background-color: #cdf;
+				color: #000;
+				padding: 0 10px;
+				height: 35px;
+			}
+			tr {
+				color: #cdf;
+			}
+			tr:nth-child(odd) {background-color: #4b4b4b;}
+		</style>
 	</head>
 	<div class="tab">
 		<a href="index.html">Play</a>
@@ -15,7 +39,7 @@
 		<a class="active" href="#Mastermind">Mastermind</a>
 	</div>
 	<h1>Title Top 100</h1>
-	<table class="center" id="leaderboard">
+	<table class="leaderboard">
 		<tr>
 			<th>Rank</th>
 			<th>Name</th>
