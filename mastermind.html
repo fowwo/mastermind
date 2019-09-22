@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<style>
 			table.code {
-				font-size: 300px;
+				font-size: 250px;
 				text-align: center;
 				vertical-align: bottom;
 				margin-left: auto; 
@@ -30,20 +30,23 @@
 	<div class="subtab">
 		<a class="active" href="mastermind.html">Mastermind</a>
 	</div>
-	<table class="code">
-		<th id="0">_</th>
-		<th id="1">_</th>
-		<th id="2">_</th>
-		<th id="3">_</th>
-		<th id="4">_</th>
-	</table>
+	<p style="text-align: center; margin: 10px 0 -42px" id="timer">0:00</p>
+	<table class="code"></table>
 	<div class="center">
 		<script>
 			const digit = 5; // Number of digits in the code
-			const max = 45; // Maximum number of guesses
+			const max = 30; // Maximum number of guesses
 			const column = Math.floor((max+14)/15);
 			var div = document.getElementsByClassName("center")[0];
+			for (var i = 0; i < digit; i++){
+				var dig = document.createElement("th");
+				dig.id = i;
+				dig.textContent = "_";
+				document.getElementsByClassName("code")[0].appendChild(dig);
+			}
+
 			div.style.width = 200 * column + "px";
+			div.style.marginTop = "-25px";
 			div.style.marginLeft = 52 - (6.5 * column) + "%";
 			for (var i = 0; i < column; i++){
 				var list = document.createElement("table");

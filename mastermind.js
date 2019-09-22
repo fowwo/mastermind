@@ -1,10 +1,20 @@
 var playing = true;
-var time = 0;
-var timeStart = 0;
+var timeStart = -1;
+var timeStop = -1;
+var timer;
 
 var code = [];
 var guess = 0;
 
+
+// The function to add leading zeros
+Number.prototype.pad = function (size){
+	var leadingZero = String(this);
+	while (leadingZero.length < (size || 2)){
+		leadingZero = "0" + leadingZero;
+	}
+	return leadingZero;
+};
 function blank(){
 	for (var i = 0; i < digit; i++){
 		document.getElementById("" + i).textContent = "_";
@@ -40,7 +50,14 @@ function check(){
 
 	// Check if the code is guess correctly
 	if (correct === digit){
+		clearInterval(timer);
+		timeStop = new Date().getTime();
 		playing = false;
+
+		console.log(timeStop - timeStart);
+		console.log(timef(timeStop - timeStart));
+		document.getElementById("timer").textContent = timef(timeStop - timeStart);
+		document.getElementById("timer").style.color = "#cdf";
 		/*
 		if (fastest == -1 || fastest > (getTime() - timeStart)){
 			fastest = getTime() - timeStart;
@@ -71,7 +88,11 @@ function check(){
 		*/
 	}
 	else if (guess >= max){
+		clearInterval(timer);
+		timeStop = new Date().getTime();
 		playing = false;
+		document.getElementById("timer").textContent = timef(timeStop - timeStart);
+		document.getElementById("timer").style.color = "#700";
 		for (var i = 0; i < digit; i++){
 			document.getElementById("" + i).textContent = code[i];
 			document.getElementById("" + i).style.color = "#f00";
@@ -103,34 +124,6 @@ function check(){
 		blank();
 		//update();
 	}
-
-	//
-	if (guess > 16) {
-		playing = false;
-	}
-	else {
-		/*
-		if (guessCount == 9) {
-			var p;
-			for (p = 1; p < 9; p++) {
-				setPosition("check" + p, getXPosition("check" + p) - 70, getYPosition("check" + p));
-				setPosition("right" + p, getXPosition("right" + p) - 70, getYPosition("right" + p));
-				setPosition("near" + p, getXPosition("near" + p) - 70, getYPosition("near" + p));
-			}
-			for (p = 9; p < 17; p++) {
-				setPosition("check" + p, getXPosition("check" + p) + 70, getYPosition("check" + p));
-				setPosition("right" + p, getXPosition("right" + p) + 70, getYPosition("right" + p));
-				setPosition("near" + p, getXPosition("near" + p) + 70, getYPosition("near" + p));
-			}
-		}
-		setText("check" + guessCount, getText("guess1") + getText("guess2") + getText("guess3") + getText("guess4"));
-		setText("right" + guessCount, correct);
-		setText("near" + guessCount, near);
-		showElement("check" + guessCount);
-		showElement("right" + guessCount);
-		showElement("near" + guessCount);
-		*/
-	}
 }
 function timef(input){
 	// Converts the time from ms to a formatted look (#:##.###)
@@ -139,6 +132,10 @@ function timef(input){
 function generate(){
 	// Generates a new code and restarts the game
 	blank();
+	timeStart = -1;
+	timeStop = -1;
+	document.getElementById("timer").textContent = "0:00";
+	document.getElementById("timer").style.color = "rgb(87, 104, 138)";
 	for (var i = 0; i < 3 * max; i++){
 		if (i % 3 === 0){
 			var temp = "";
@@ -151,11 +148,12 @@ function generate(){
 			document.getElementById("e" + i).textContent = "--";
 		}
 	}
-	code = [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)];
-	guess = 0;
+	code = [];
 	for (var i = 0; i < digit; i++){
+		code.push(Math.floor(Math.random()*10));
 		document.getElementById("" + i).style.color = "#cdf";
 	}
+	guess = 0;
 	playing = true;
 }
 	/*
@@ -227,32 +225,6 @@ function generate(){
 		timeStart = 0;
 		update();
 	}
-
-	//
-	if (guessCount > 16){
-	  playing = false;
-	}
-	else {
-	  if (guessCount == 9){
-		var p;
-		for (p = 1; p < 9; p++){
-		  setPosition("check" + p, getXPosition("check" + p) - 70, getYPosition("check" + p));
-		  setPosition("right" + p, getXPosition("right" + p) - 70, getYPosition("right" + p));
-		  setPosition("near" + p, getXPosition("near" + p) - 70, getYPosition("near" + p));
-		}
-		for (p = 9; p < 17; p++){
-		  setPosition("check" + p, getXPosition("check" + p) + 70, getYPosition("check" + p));
-		  setPosition("right" + p, getXPosition("right" + p) + 70, getYPosition("right" + p));
-		  setPosition("near" + p, getXPosition("near" + p) + 70, getYPosition("near" + p));
-		}
-	  }
-	  setText("check" + guessCount, getText("guess1") + getText("guess2") + getText("guess3") + getText("guess4"));
-	  setText("right" + guessCount, correct);
-	  setText("near" + guessCount, near);
-	  showElement("check" + guessCount);
-	  showElement("right" + guessCount);
-	  showElement("near" + guessCount);
-	}
   }
 
 	*/
@@ -262,6 +234,14 @@ window.addEventListener("keyup", (event) => {
 	if (playing){
 		// To prevent things like Number(Spacebar) === 0...
 		if (event.key === "0" || event.key === "1" || event.key === "2" || event.key === "3" || event.key === "4" || event.key === "5" || event.key === "6" || event.key === "7" || event.key === "8" || event.key === "9" || event.key === "0"){
+			if (timeStart === -1){
+				timeStart = new Date().getTime();
+				var i = 0;
+				timer = setInterval(() => {
+					i++;
+					document.getElementById("timer").textContent = Math.floor(i / 60) + ":" + Math.floor(i % 60).pad(2);
+				}, 1000);
+			}
 			for (var i = 0; i < digit; i++){
 				if (document.getElementById("" + i).textContent === "_"){
 					document.getElementById("" + i).textContent = event.key;
@@ -304,15 +284,3 @@ window.addEventListener("keyup", (event) => {
 	}
 	*/
 });
-
-
-/* Creating places for the code with n digits
-var codeHolder = document.createElement("table");
-	codeHolder.className = "code";
-	for (var i = 0; i < 6; i++){
-		var place = document.createElement("th");
-		codeHolder.appendChild(place);
-		place.textContent = "_";
-		place.id = i;
-	}
-*/
