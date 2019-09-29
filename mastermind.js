@@ -1,3 +1,4 @@
+var fastest = -1;
 var playing = true;
 var timeStart = -1;
 var timeStop = -1;
@@ -48,34 +49,61 @@ function check(){
 	document.getElementById("e" + (3 * guess - 2)).textContent = correct;
 	document.getElementById("e" + (3 * guess - 1)).textContent = near;
 
+/*
+	if (correct === 5) {
+		win++;
+		playSound("sound://category_points/vibrant_game_ding_touch_1.mp3");
+		showElement("restart");
+		showElement("leaderboardButton");
+		guesses++;
+		average = (guesses / win).toFixed(3);
+		score += Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5);
+		setText("bonus", "+" + Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5));
+		console.log("bonus should be: " + Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5));
+
+		setProperty("bonus", "text-color", "#0c0");
+		showElement("bonus");
+		timeStart = 0;
+		update();
+	}
+  }
+
+	*/
+
 	// Check if the code is guess correctly
 	if (correct === digit){
 		clearInterval(timer);
 		timeStop = new Date().getTime();
+		//win++;
 		playing = false;
 
+		// Display time
 		console.log(timeStop - timeStart);
 		console.log(timef(timeStop - timeStart));
 		document.getElementById("timer").textContent = timef(timeStop - timeStart);
-		document.getElementById("timer").style.color = "#cdf";
-		/*
-		if (fastest == -1 || fastest > (getTime() - timeStart)){
-			fastest = getTime() - timeStart;
-			setProperty("timer", "text-color", "#fc0");
-			setText("timer", format(fastest));
+		if (fastest == -1 || fastest > timeStop - timeStart) { // If new fastest time
+			fastest = timeStop - timeStart;
+			document.getElementById("timer").style.color = "#fa0";
 		}
 		else {
-			setText("timer", format(getTime() - timeStart));
+			document.getElementById("timer").style.color = "#cdf";
 		}
-		*/
-		//playSound("sound://category_points/vibrant_game_ding_touch_1.mp3");
-		
+
+		// Display bonus
+		var score = 50;
+		document.getElementById("bonus").textContent = "+" + score;
+		document.getElementById("bonus").style.color = "#0f0";
+		document.getElementById("bonus").style.display = "inline";
+
+		// Display code
 		for (var i = 0; i < digit; i++){
 			document.getElementById("" + i).style.color = "#0f0";
 		}
+		/*
+		//playSound("sound://category_points/vibrant_game_ding_touch_1.mp3");
 		//showElement("restart");
 		//showElement("leaderboardButton");
-		/*
+		
 		average = (guesses / win).toFixed(3);
 		score += Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5);
 		setText("bonus", "+" + Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5));
@@ -91,12 +119,24 @@ function check(){
 		clearInterval(timer);
 		timeStop = new Date().getTime();
 		playing = false;
+
+		// Display time
+		console.log(timeStop - timeStart);
+		console.log(timef(timeStop - timeStart));
 		document.getElementById("timer").textContent = timef(timeStop - timeStart);
 		document.getElementById("timer").style.color = "#700";
+
+		// Display bonus
+		document.getElementById("bonus").textContent = "-500";
+		document.getElementById("bonus").style.color = "#f00";
+		document.getElementById("bonus").style.display = "inline";
+
+		// Display code
 		for (var i = 0; i < digit; i++){
 			document.getElementById("" + i).textContent = code[i];
 			document.getElementById("" + i).style.color = "#f00";
 		}
+
 		/*
 		setText("timer", getText("timer") + "." + ((getTime() - timeStart) % 1000).pad(3));
 		loss++;
@@ -122,6 +162,7 @@ function check(){
 	else {
 		//playSound("sound://category_tap/vibrant_ui_mouse_click_1.mp3");
 		blank();
+		//guesses++;
 		//update();
 	}
 }
@@ -136,6 +177,7 @@ function generate(){
 	timeStop = -1;
 	document.getElementById("timer").textContent = "0:00";
 	document.getElementById("timer").style.color = "rgb(87, 104, 138)";
+	document.getElementById("bonus").style.display = "none";
 	for (var i = 0; i < 3 * max; i++){
 		if (i % 3 === 0){
 			var temp = "";
@@ -156,78 +198,7 @@ function generate(){
 	guess = 0;
 	playing = true;
 }
-	/*
-	if (correct === 5) {
-		playing = false;
-		if (fastest == -1 || fastest > (getTime() - timeStart)) {
-			fastest = getTime() - timeStart;
-			setProperty("timer", "text-color", "#fc0");
-			setText("timer", format(fastest));
-		}
-		else {
-			setText("timer", format(getTime() - timeStart));
-		}
-		win++;
-		playSound("sound://category_points/vibrant_game_ding_touch_1.mp3");
-		setProperty("guess1", "text-color", "#0c0");
-		setProperty("guess2", "text-color", "#0c0");
-		setProperty("guess3", "text-color", "#0c0");
-		setProperty("guess4", "text-color", "#0c0");
-		showElement("restart");
-		showElement("leaderboardButton");
-		guesses++;
-		average = (guesses / win).toFixed(3);
-		score += Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5);
-		setText("bonus", "+" + Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5));
-		console.log("bonus should be: " + Math.floor(2000000 / (getTime() - timeStart + 20000) * ((-19 / 300) * (guessCount - 1) + 1) + 0.5));
-
-		setProperty("bonus", "text-color", "#0c0");
-		showElement("bonus");
-		timeStart = 0;
-		update();
-	}
-	else if (guessCount < 16) {
-		playSound("sound://category_tap/vibrant_ui_mouse_click_1.mp3");
-		setText("guess1", "•");
-		setText("guess2", "•");
-		setText("guess3", "•");
-		setText("guess4", "•");
-		guesses++;
-		update();
-	}
-	else {
-		playing = false;
-		setText("timer", getText("timer") + "." + ((getTime() - timeStart) % 1000).pad(3));
-		loss++;
-		playSound("sound://category_alerts/vibrant_game_life_lost_1.mp3");
-		setText("guess1", num[0]);
-		setText("guess2", num[1]);
-		setText("guess3", num[2]);
-		setText("guess4", num[3]);
-		setProperty("guess1", "text-color", "#c00");
-		setProperty("guess2", "text-color", "#c00");
-		setProperty("guess3", "text-color", "#c00");
-		setProperty("guess4", "text-color", "#c00");
-		showElement("restart");
-		showElement("leaderboardButton");
-		guesses++;
-		average = (guesses / win).toFixed(3);
-		if (score >= 500) {
-			setText("bonus", "(-500)");
-			score -= 500;
-		}
-		else {
-			setText("bonus", "(-" + score + ")");
-			score = 0;
-		}
-		setProperty("bonus", "text-color", "#c00");
-		showElement("bonus");
-		timeStart = 0;
-		update();
-	}
-  }
-
-	*/
+	
 generate();
 
 window.addEventListener("keyup", (event) => {
