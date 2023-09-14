@@ -1,13 +1,84 @@
 <!DOCTYPE html>
 <html>
-<title>Play</title>
+<title>Mastermind</title>
 <body>
 	<head>
 		<link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<style>
+			table.code {
+				font-size: 250px;
+				margin: -52px 0 0 0;
+				text-align: center;
+				vertical-align: bottom;
+				margin-left: auto; 
+				margin-right: auto;
+			}
+			.center {
+				margin-left: auto;
+				margin-right: auto;
+			}
+			th {
+				padding: 0px 20px;
+			}
+		</style>
 	</head>
-	<script src="navigate.js"></script>
-	<h1>fowwo</h1>
-	<script type="text/javascript" src="test.js"></script>
+	<div style="margin-left: auto; margin-right: auto; text-align: center; padding:10px">
+		<p style="display: inline" id="timer">0:00</p>
+		<p style="display: inline" id="bonus"></p>
+	</div>
+	<div>
+		<table class="code"></table>
+	</div>
+	<div class="center">
+		<script>
+			const digit = 5; // Number of digits in the code
+			const max = 30; // Maximum number of guesses
+			const column = Math.floor((max+14)/15);
+			var div = document.getElementsByClassName("center")[0];
+			for (var i = 0; i < digit; i++){
+				var dig = document.createElement("th");
+				dig.id = i;
+				dig.textContent = "_";
+				document.getElementsByClassName("code")[0].appendChild(dig);
+			}
+
+			div.style.width = 200 * column + "px";
+			div.style.marginTop = "-25px";
+			div.style.marginLeft = 52 - (6.5 * column) + "%";
+			for (var i = 0; i < column; i++){
+				var list = document.createElement("table");
+				div.appendChild(list);
+				list.className = "list" + i;
+				list.style = "display: inline-block;" + 
+					"font-size: 24px;" + 
+					"text-align: center;" + 
+					"width: " + 100/column + "%;";
+				for (var j = 0; j < 15; j++){
+					var row = document.createElement("tr");
+					row.className = "row" + j;
+					list.appendChild(row);
+					for (var k = 0; k < 3; k++){
+						var element = document.createElement("td");
+						if (k !== 0){
+							element.textContent = ".";
+						}
+						else {
+							element.textContent = ".";
+						}
+						element.id = "e" + (45*i + 3*j + k);
+						if (k === 1){
+							element.style.color = "#0f0";
+						}
+						else if (k === 2){
+							element.style.color = "#fa0";
+						}
+						row.appendChild(element);
+					}
+				}
+			}
+		</script>
+	</div>
+	<script type="text/javascript" src="mastermind.js"></script>
 </body>
 </html>
